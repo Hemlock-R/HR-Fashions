@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>OWUSU FASHION - The house of Master Piece</title>
+<meta name="description" content="Luxury fashion made by hand. Limited runs, private atelier consultation.">
+
+<!-- ========================================================
+     GOOGLE FONTS
+     Fraunces -> editorial serif display headlines (warm, high-contrast)
+     Plus Jakarta Sans -> body / UI / labels
+======================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+
+<!-- ========================================================
+     TAILWIND CSS (CDN)
+======================================================== -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // CHANGE THEME TOKENS HERE — palette, fonts, and container widths flow from this config
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          obsidian: '#090808',   // base background — deepest luxury charcoal
+          surface: '#121111',    // elevated surface / card background
+          sand: '#f5f2eb',       // primary text — crisp luxury ivory
+          cognac: '#c86d3d',     // accent — cognac/terracotta
+          gold: '#d9b06a',       // secondary accent — muted gold, used sparingly for hairline highlights
+          line: '#242220'        // structural 1px border color on dark ground
+        },
+        fontFamily: {
+          serif: ['"Fraunces"', 'serif'],
+          sans: ['"Plus Jakarta Sans"', 'sans-serif']
+        },
+        letterSpacing: {
+          widest2: '0.28em'
+        },
+        boxShadow: {
+          elevated: '0 40px 100px -20px rgba(0,0,0,0.7)'
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  /* ========================================================
+     FLUID TYPE SCALE — clamp() scales from small mobile
+     phones through ultrawide 4K displays without breakpoints
+  ======================================================== */
+  :root{
+    --fs-hero: clamp(2.6rem, 2rem + 5.5vw, 6.75rem);
+    --fs-h2:   clamp(2rem, 1.5rem + 2.6vw, 4.25rem);
+    --fs-h3:   clamp(1.35rem, 1.15rem + 1vw, 2rem);
+    --fs-eyebrow: clamp(0.62rem, 0.58rem + 0.18vw, 0.78rem);
+  }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background-color:#090808;
+    color:#f5f2eb;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    overflow-x:hidden; /* guards against horizontal scroll bugs on narrow / foldable screens */
+  }
+
+  .font-serif{ font-family:'Fraunces', serif; }
+
+  h1, .hero-type{ font-size: var(--fs-hero); line-height: 0.98; }
+  .h2-type{ font-size: var(--fs-h2); line-height: 1.02; }
+  .h3-type{ font-size: var(--fs-h3); line-height: 1.08; }
+  .eyebrow{ font-size: var(--fs-eyebrow); }
+
+  /* ========================================================
+     REVEAL ENGINE — elements start hidden/offset, JS toggles
+     .reveal-active via IntersectionObserver as user scrolls
+  ======================================================== */
+  .reveal{
+    opacity:0;
+    transform: translateY(2.25rem);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    will-change: opacity, transform;
+  }
+  .reveal-active{ opacity:1; transform: translateY(0); }
+  .reveal-d1{ transition-delay: 0.08s; }
+  .reveal-d2{ transition-delay: 0.16s; }
+  .reveal-d3{ transition-delay: 0.24s; }
+  .reveal-d4{ transition-delay: 0.32s; }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ========================================================
+     GLASSMORPHISM — frosted glass panels for badges, quick
+     view overlays, and interactive components
+  ======================================================== */
+  .glass{
+    background: rgba(18,17,17,0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(245,242,235,0.14);
+  }
+  .glass-gold-edge{
+    border: 1px solid rgba(217,176,106,0.35);
+  }
+
+  /* Image hover — scale-up zoom + glass quick view overlay */
+  .look-frame{ overflow:hidden; position:relative; border-radius:1.25rem; }
+  .look-frame img{ transition: transform 1.1s cubic-bezier(0.16,1,0.3,1), filter 0.6s ease; }
+  .look-frame:hover img{ transform: scale(1.07); filter: contrast(1.06) saturate(1.06); }
+  .quick-view{
+    position:absolute; inset:0;
+    display:flex; align-items:flex-end; padding:1rem;
+    background: linear-gradient(180deg, transparent 45%, rgba(9,8,8,0.55) 100%);
+    opacity:0; transition: opacity 0.5s ease;
+  }
+  .look-frame:hover .quick-view{ opacity:1; }
+  .quick-view-inner{ transform: translateY(10px); transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); width:100%; }
+  .look-frame:hover .quick-view-inner{ transform: translateY(0); }
+
+  /* live atelier pulsing indicator */
+  .live-dot{
+    position:relative; width:8px; height:8px; border-radius:9999px; background:#8fd19e;
+  }
+  .live-dot::after{
+    content:''; position:absolute; inset:0; border-radius:9999px; background:#8fd19e;
+    animation: live-pulse 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+  @keyframes live-pulse{
+    0%{ transform:scale(1); opacity:0.7; }
+    75%,100%{ transform:scale(2.6); opacity:0; }
+  }
+
+  /* Ticker / materials marquee */
+  .ticker-track{ display:flex; width:max-content; animation: ticker 30s linear infinite; }
+  .ticker-track:hover{ animation-play-state: paused; }
+  @keyframes ticker{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+
+  /* Modal drawer — frosted glass backdrop + glass panel */
+  #lookModal{ transition: opacity 0.45s ease; }
+  #modalPanel{ transition: transform 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.55s ease; }
+
+  /* ========================================================
+     WISHLIST — save/heart toggle states
+  ======================================================== */
+  .save-toggle{ color: rgba(245,242,235,0.85); }
+  .save-toggle.is-saved{
+    color:#c86d3d;
+    border-color: rgba(200,109,61,0.6);
+  }
+  .save-toggle.is-saved .save-icon{ fill: currentColor; }
+  .save-toggle:active{ transform: scale(0.92); }
+
+  /* fabric texture inspection thumbnails inside the lookbook modal */
+  .tex-thumb{
+    border: 1px solid rgba(245,242,235,0.14);
+    transition: border-color 0.3s ease, opacity 0.3s ease;
+    opacity:0.65;
+  }
+  .tex-thumb:hover{ opacity:1; }
+  .tex-thumb.is-active{
+    border-color:#c86d3d;
+    opacity:1;
+  }
+
+  /* Saved Looks drawer */
+  #savedDrawer{ transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+  #savedDrawerBackdrop{ transition: opacity 0.45s ease; }
+
+  /* pulsing badge on the floating Saved Looks button */
+  .saved-badge{
+    min-width:1.1rem; height:1.1rem;
+    font-size:0.65rem; line-height:1;
+  }
+
+  /* WhatsApp floating button ping */
+  .wa-ping{
+    position:absolute; inset:0; border-radius:9999px;
+    background:#25D366;
+    animation: wa-pulse 2.2s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+  @keyframes wa-pulse{
+    0%{ transform:scale(1); opacity:0.65; }
+    75%,100%{ transform:scale(2.1); opacity:0; }
+  }
+
+  .nav-link{ position:relative; }
+  .nav-link::after{
+    content:''; position:absolute; left:0; bottom:-4px;
+    width:0; height:1px; background:#c86d3d;
+    transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .nav-link:hover::after{ width:100%; }
+
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid #d9b06a;
+    outline-offset: 3px;
+  }
+
+  img, video{ max-width:100%; height:auto; }
+</style>
+</head>
+
+<body class="antialiased selection:bg-cognac selection:text-obsidian">
+
+<!-- ============================================================
+     NAVIGATION — fixed, transparent over hero, solidifies on scroll
+============================================================ -->
+<header id="siteHeader" class="fixed top-0 inset-x-0 z-40 transition-colors duration-500">
+  <div class="max-w-[1800px] mx-auto px-4 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between">
+    <!-- CHANGE BRAND NAME HERE -->
+    <a href="#top" class="font-serif text-xl sm:text-2xl tracking-tight">OWUSU FASHION </a>
+
+    <nav class="hidden md:flex items-center gap-8 lg:gap-10 eyebrow uppercase tracking-widest2 text-sand/80">
+      <a href="#house" class="nav-link">The House</a>
+      <a href="#lookbook" class="nav-link">Lookbook</a>
+      <a href="#craft" class="nav-link">Craft</a>
+      <a href="#journal" class="nav-link">Journal</a>
+      <a href="#contact" class="nav-link">Consultation</a>
+    </nav>
+
+    <!-- CHANGE WHATSAPP NUMBER HERE (digits only, country code first) -->
+    <a href="https://wa.me/233257593878?text=Hello%2C%20I%20would%20like%20to%20request%20a%20private%20atelier%20consultation."
+       target="_blank" rel="noopener"
+       class="hidden sm:inline-flex items-center glass px-4 lg:px-5 py-2 eyebrow uppercase tracking-widest2 hover:border-cognac hover:text-cognac transition-colors duration-300 rounded-full">
+      Inquire
+    </a>
+
+    <button id="menuToggle" aria-label="Open menu" aria-expanded="false" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-[5px]">
+      <span class="block w-6 h-px bg-sand"></span>
+      <span class="block w-6 h-px bg-sand"></span>
+    </button>
+  </div>
+
+  <div id="mobileNav" class="md:hidden hidden bg-obsidian border-t border-line">
+    <div class="px-5 py-6 flex flex-col gap-5 eyebrow uppercase tracking-widest2">
+      <a href="#house" class="mobile-link">The House</a>
+      <a href="#lookbook" class="mobile-link">Lookbook</a>
+      <a href="#craft" class="mobile-link">Craft</a>
+      <a href="#journal" class="mobile-link">Journal</a>
+      <a href="#contact" class="mobile-link text-cognac">Consultation</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     THE CINEMATIC FLOATING HERO
+     A rounded, elevated card (not flat/full-viewport) housing
+     the full-bleed editorial image, multi-layer gradients,
+     headline, and a glass "live atelier" pulsing indicator.
+============================================================ -->
+<section id="top" class="relative pt-24 sm:pt-28 lg:pt-32 px-3 sm:px-6 lg:px-10">
+  <div class="reveal relative max-w-[1800px] mx-auto h-[86svh] min-h-[540px] rounded-[1.75rem] sm:rounded-[2.5rem] overflow-hidden border border-line shadow-elevated">
+
+    <!-- INSERT YOUR CINEMATIC HERO IMAGE LINK HERE -->
+    <img src="images/crafting.jpg"
+         alt="hand crafting a dress" loading="eager" fetchpriority="high"
+         class="absolute inset-0 w-full h-full object-cover object-top">
+
+    <!-- multi-layered luxury dark gradients -->
+    <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/45 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-obsidian/70 via-transparent to-obsidian/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-obsidian/50 via-transparent to-transparent"></div>
+
+    <!-- glass "live atelier" pulsing indicator badge -->
+    <div class="absolute top-5 sm:top-8 left-5 sm:left-8 glass rounded-full pl-3 pr-4 py-2 flex items-center gap-2.5">
+      <span class="live-dot"></span>
+      <span class="eyebrow uppercase tracking-widest2 text-sand/85">Atelier Live — Accra</span>
+    </div>
+
+    <!-- headline + CTA content, floated inside the rounded card -->
+    <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-14">
+      <p class="eyebrow uppercase tracking-widest2 text-cognac mb-3 sm:mb-5">
+        Resort Collection — No. 09
+      </p>
+      <h1 class="font-serif hero-type tracking-tight max-w-3xl">
+        Gold, worn<br><span class="italic text-cognac">quietly.</span>
+      </h1>
+      <div class="mt-6 sm:mt-9 flex flex-wrap items-center gap-3 sm:gap-4">
+        <a href="#lookbook" class="inline-flex items-center gap-2 bg-sand text-obsidian px-5 sm:px-6 py-3 sm:py-3.5 eyebrow uppercase tracking-widest2 rounded-full hover:bg-cognac hover:text-sand transition-colors duration-300">
+          Explore the Lookbook
+        </a>
+        <a href="#contact" class="inline-flex items-center gap-2 glass px-5 sm:px-6 py-3 sm:py-3.5 eyebrow uppercase tracking-widest2 rounded-full hover:border-cognac hover:text-cognac transition-colors duration-300">
+          Book a Consultation
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CUSTOM COMMISSION BANNER — explicit made-to-measure messaging.
+     EDIT THE STATEMENT COPY HERE if your commission terms change.
+============================================================ -->
+<section class="relative -mt-6 sm:-mt-8 px-3 sm:px-6 lg:px-10">
+  <div class="reveal max-w-[1800px] mx-auto glass glass-gold-edge rounded-2xl sm:rounded-3xl px-6 sm:px-10 py-6 sm:py-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8">
+    <span class="eyebrow uppercase tracking-widest2 text-cognac shrink-0">Custom Commission</span>
+    <p class="text-sand/80 leading-relaxed text-sm sm:text-base">
+      <!-- EDIT CUSTOM COMMISSION STATEMENT HERE -->
+      Every piece shown is a showcase of our craft. <span class="text-sand">Any silhouette, fabric, or design can be custom-created to your exact measure.</span>
+    </p>
+    <a href="#contact" class="sm:ml-auto shrink-0 inline-flex items-center gap-2 border border-sand/30 hover:border-cognac hover:text-cognac transition-colors duration-300 px-5 py-2.5 eyebrow uppercase tracking-widest2 rounded-full">
+      Start a Commission
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     MATERIALS TICKER
+============================================================ -->
+<div class="mt-10 sm:mt-14 border-y border-line py-3 sm:py-4 overflow-hidden">
+  <div class="ticker-track eyebrow uppercase tracking-widest2 text-sand/60">
+    <!-- EDIT TICKER ITEMS HERE — duplicated once below for a seamless loop, keep both lists identical -->
+    <span class="flex items-center gap-4 pr-4">
+      <span>Hand-Loomed Silk</span><span class="text-cognac">·</span>
+      <span>18k Gold Hardware</span><span class="text-cognac">·</span>
+      <span>Made to Measure</span><span class="text-cognac">·</span>
+      <span>Accra Atelier</span><span class="text-cognac">·</span>
+      <span>unlimited Pieces</span><span class="text-cognac">·</span>
+      <span>By Private Appointment</span><span class="text-cognac">·</span>
+    </span>
+    <span class="flex items-center gap-4 pr-4" aria-hidden="true">
+      <span>Hand-Loomed Silk</span><span class="text-cognac">·</span>
+      <span>18k Gold Hardware</span><span class="text-cognac">·</span>
+      <span>Made to Measure</span><span class="text-cognac">·</span>
+      <span>Accra Atelier</span><span class="text-cognac">·</span>
+      <span>unlimited pieces</span><span class="text-cognac">·</span>
+      <span>By Private Appointment</span><span class="text-cognac">·</span>
+    </span>
+  </div>
+</div>
+
+<!-- ============================================================
+     THE HOUSE — editorial manifesto, asymmetric text block
+============================================================ -->
+<section id="house" class="py-20 sm:py-28 lg:py-36 border-b border-line">
+  <div class="max-w-[1800px] mx-auto px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8">
+      <div class="lg:col-span-3">
+        <p class="reveal eyebrow uppercase tracking-widest2 text-cognac">The House</p>
+      </div>
+      <div class="lg:col-span-8 lg:col-start-5">
+        <p class="reveal font-serif h2-type tracking-tight">
+          <!-- EDIT MANIFESTO COPY HERE -->
+          We craft for the individual who enters a room without needing to announce their presence. Every thread, clasp, and seam made by hand, uniquely for them.
+        </p>
+        <div class="mt-10 sm:mt-14 grid grid-cols-2 sm:grid-cols-4 gap-8 border-t border-line pt-8">
+          <div class="reveal reveal-d1">
+            <p class="font-serif text-3xl sm:text-4xl text-cognac">2011</p>
+            <p class="eyebrow uppercase tracking-widest2 text-sand/50 mt-2">Founded, Accra</p>
+          </div>
+          <div class="reveal reveal-d2">
+            <p class="font-serif text-3xl sm:text-4xl text-cognac">25</p>
+            <p class="eyebrow uppercase tracking-widest2 text-sand/50 mt-2">Pieces per drop</p>
+          </div>
+          <div class="reveal reveal-d3">
+            <p class="font-serif text-3xl sm:text-4xl text-cognac">90+</p>
+            <p class="eyebrow uppercase tracking-widest2 text-sand/50 mt-2">Hours per garment</p>
+          </div>
+          <div class="reveal reveal-d4">
+            <p class="font-serif text-3xl sm:text-4xl text-cognac">5</p>
+            <p class="eyebrow uppercase tracking-widest2 text-sand/50 mt-2">Master artisans</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LOOKBOOK — asymmetric staggered grid, click to open modal.
+     Each .look-item carries data-* attributes consumed by JS
+     to populate the modal and build the WhatsApp inquiry link.
+============================================================ -->
+<section id="lookbook" class="py-20 sm:py-28 lg:py-36 border-b border-line">
+  <div class="max-w-[1800px] mx-auto px-5 sm:px-8 lg:px-12">
+
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12 sm:mb-16">
+      <div>
+        <p class="reveal eyebrow uppercase tracking-widest2 text-cognac mb-3">Lookbook</p>
+        <h2 class="reveal reveal-d1 font-serif h2-type tracking-tight">Resort<br>No. 09</h2>
+      </div>
+      <p class="reveal reveal-d2 text-sand/50 max-w-xs text-sm sm:text-base">
+        <!-- EDIT LOOKBOOK INTRO COPY HERE -->
+        Every look shown can be recreated in your size, fabric, and colourway. Tap any piece to inspect the craft, save it, or inquire directly.
+      </p>
+    </div>
+
+    <!-- Asymmetric staggered grid: uneven spans + lg:mt offsets create the magazine stagger -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-6 sm:gap-8">
+
+      <!-- LOOK 01 — .look-item is an <article> (not <button>) so the save/heart
+           control below can be a real, independently-clickable button without
+           invalid nested-button markup. Keyboard users can still open it via
+           Enter/Space thanks to role="button" + tabindex + the JS handler. -->
+      <article
+        class="look-item reveal text-left lg:col-span-5 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-01"
+        data-name="The Sunset Monarch Gown"
+        data-code="LOOK 01 — Resort"
+        data-motif="HAND BEADED MOTIF,SILK DRAPE"
+        data-desc="A striking structured gown featuring vibrant orange and deep blue hand-embroidered butterfly motifs, complemented by a dramatic side-swept silk train."
+        data-price="From GH₵9,800"
+        data-img="images/lady_image1.jpg"
+        data-tex1-img="images/lady_fan.jpg"
+        data-tex1-label="Silk Weave, Macro"
+        data-tex2-img="images/lady_image11.jpg"
+        data-tex2-label="Gold-Thread Hem">
+        <div class="look-frame border border-line aspect-[3/4]">
+          <!-- INSERT LOOK 01 IMAGE LINK HERE -->
+          <img src="images/lady_image1.jpg" alt="The Sunset Monarch Gown" loading="lazy" class="w-full h-full object-cover">
+
+          <!-- "made to measure" chip — reinforces custom-commission messaging on every card -->
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <!-- SAVE / WISHLIST TOGGLE — pins this look to the floating "Saved Looks" drawer -->
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Adaeze Gown to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 01</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Sunset Monarch Gown</p>
+          <p class="eyebrow text-sand/40">01</p>
+        </div>
+      </article>
+
+      <!-- LOOK 02 — offset downward on large screens for stagger -->
+      <article
+        class="look-item reveal reveal-d1 text-left lg:col-span-4 lg:col-start-7 lg:mt-20 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-02"
+        data-name="The Executive Pinstripe Suit"
+        data-code="LOOK 02 — RESORT"
+        data-motif="WOOL_BLEND TAILORING, BRASS ACCENTS"
+        data-desc="A modern double-breasted blazer in rich chocolate pinstripe wool, impeccably balanced with crisp cream trousers and tailored structure."
+        data-price="From GH₵12,400"
+        data-img="images/men_image3.jpg"
+        data-tex1-img="images/men_image2.jpg"
+        data-tex1-label="Wool-Silk Weave, Macro"
+        data-tex2-img="images/men_image9.jpg"
+        data-tex2-label="Horn Button Detail">
+        <div class="look-frame border border-line aspect-[3/4]">
+          <!-- INSERT LOOK 02 IMAGE LINK HERE -->
+          <img src="images/men_image3.jpg" alt="The Executive Pinstripe Suit" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save Ọba Tailored Suit to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 02</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Executive Pinstripe Suit</p>
+          <p class="eyebrow text-sand/40">02</p>
+        </div>
+      </article>
+
+      <!-- LOOK 03 -->
+      <article
+        class="look-item reveal reveal-d2 text-left lg:col-span-3 lg:col-start-2 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-03"
+        data-name="The Imperial Emerald Cape"
+        data-code="LOOK 03 — RESORT"
+        data-motif="BROCADE JACQUARD, DRAPED SILHOUETTE"
+        data-desc="A magnificent floor-length statement piece combining rich green and gold brocade patterns with a cascading full-circle structured cape."
+        data-price="From GH₵8,200"
+        data-img="images/lady_image9.jpg"
+        data-tex1-img="images/lady_image10.jpg"
+        data-tex1-label="Cashmere-Wool, Macro"
+        data-tex2-img="images/lady_image3.jpg"
+        data-tex2-label="18k Gold Clasp Detail">
+        <div class="look-frame border border-line aspect-[3/4]">
+          <!-- INSERT LOOK 03 IMAGE LINK HERE -->
+          <img src="images/lady_image9.jpg" alt="The Imperial Emerald Cape" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Amara Cape to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 03</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Imperial Emerald Cape</p>
+          <p class="eyebrow text-sand/40">03</p>
+        </div>
+      </article>
+
+      <!-- LOOK 04 -->
+      <article
+        class="look-item reveal reveal-d3 text-left lg:col-span-6 lg:col-start-6 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-04"
+        data-name="The Midnight Mosaic Pair"
+        data-code="LOOK 04 — RESORT"
+        data-motif="INDIGO POPLIN, MATCHING SET"
+        data-desc="A harmonious couple's look featuring deep blue geometric patterns contrasted against clean navy panels, tailored for effortless evening synchronization."
+        data-price="From GH₵7,600"
+        data-img="images/lady_men1.jpg"
+        data-tex1-img="images/men_image4.jpg"
+        data-tex1-label="Hand-Knit Wool, Macro"
+        data-tex2-img="images/men_image10.jpg"
+        data-tex2-label="Jacquard Weave Detail">
+        <div class="look-frame border border-line aspect-[4/5] sm:aspect-[16/10]">
+          <!-- INSERT LOOK 04 IMAGE LINK HERE -->
+          <img src="images/lady_men1.jpg" alt="The Midnight Mosaic Pair" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Kofi Overcoat to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 04</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Midnight Mosaic Pair</p>
+          <p class="eyebrow text-sand/40">04</p>
+        </div>
+      </article>
+
+      <!-- LOOK 05 — mirrors the Look 01 span on the right side of the grid -->
+      <article
+        class="look-item reveal reveal-d1 text-left lg:col-span-5 lg:col-start-8 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-05"
+        data-name="The Midnight Pearl Cocktail"
+        data-code="LOOK 05 — RESORT"
+        data-motif="SILK SATIN, HAND-SET PEARLS"
+        data-desc="A playful yet elegant skater-style cocktail dress in deep navy satin, exquisitely dotted with hand-applied pearl embellishments throughout the flared skirt."
+        data-price="From GH₵6,900"
+        data-img="images/lady_image7.jpg"
+        data-tex1-img="images/lady_image5.jpg"
+        data-tex1-label="Silk Charmeuse, Macro"
+        data-tex2-img="images/lady_image6.jpg"
+        data-tex2-label="Hand-Stitched Piping">
+        <div class="look-frame border border-line aspect-[3/4]">
+          <!-- INSERT LOOK 05 IMAGE LINK HERE -->
+          <img src="images/lady_image7.jpg" alt="The Midnight Pearl Cocktail" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Ama Sheath Dress to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 05</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Midnight Pearl Cocktail</p>
+          <p class="eyebrow text-sand/40">05</p>
+        </div>
+      </article>
+
+      <!-- LOOK 06 — mirrors the Look 02 span on the left, offset downward -->
+      <article
+        class="look-item reveal reveal-d2 text-left lg:col-span-4 lg:col-start-1 lg:mt-24 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-06"
+        data-name="The Asymmetric Grid Jacket"
+        data-code="LOOK 06 — RESORT"
+        data-motif="STRUCTURED TWEED, DIAGONAL BUTTONS"
+        data-desc="An avant-garde jacket featuring a striking diagonal button layout and a sharp white-and-navy geometric plaid weave for the modern sartorialist."
+        data-price="From GH₵5,400"
+        data-img="images/men_image15.jpg"
+        data-tex1-img="images/men_image14.jpg"
+        data-tex1-label="Waxed Cotton, Macro"
+        data-tex2-img="images/men_image16.jpg"
+        data-tex2-label="Brass Hardware Detail">
+        <div class="look-frame border border-line aspect-[3/4]">
+          <!-- INSERT LOOK 06 IMAGE LINK HERE -->
+          <img src="images/men_image15.jpg" alt="The Asymmetric Grid Jacket" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Yaw Field Jacket to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 06</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Asymmetric Grid Jacket</p>
+          <p class="eyebrow text-sand/40">06</p>
+        </div>
+      </article>
+
+      <!-- LOOK 07 — mirrors the Look 03 span, center-right -->
+      <article
+        class="look-item reveal reveal-d3 text-left lg:col-span-3 lg:col-start-6 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-07"
+        data-name="The Veridian Halter Ensemble"
+        data-code="LOOK 07 — RESORT"
+        data-motif="SILK CHIFFON, PRINTED PANEL"
+        data-desc="A breathtaking one-shoulder gown featuring an emerald green bodice that cascades into a hidden patterned African print skirt panel and a large statement bow."
+        data-price="From GH₵11,200"
+        data-img="images/lady_image16.jpg"
+        data-tex1-img="images/lady_image13.jpg"
+        data-tex1-label="Hand-Beaded Bodice, Macro"
+        data-tex2-img="images/lady_image12.jpg"
+        data-tex2-label="Silk Chiffon Weave">
+        <div class="look-frame border border-line aspect-[3/4]">
+          <!-- INSERT LOOK 07 IMAGE LINK HERE -->
+          <img src="images/lady_image16.jpg" alt="The Veridian Halter Ensemble" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Efya Halter Gown to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 07</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Veridian Halter Ensemble</p>
+          <p class="eyebrow text-sand/40">07</p>
+        </div>
+      </article>
+
+      <!-- LOOK 08 — mirrors the Look 04 wide span, left side -->
+      <article
+        class="look-item reveal reveal-d4 text-left lg:col-span-6 lg:col-start-1 lg:mt-12 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-08"
+        data-name="The Cosmic Purple Duo"
+        data-code="LOOK 08 — RESORT"
+        data-motif="CELESTIAL PRINT, EVENING DRAPE"
+        data-desc="Matching rich purple ensembles uniquely patterned with scattered white stars, blending tailored modern jackets with an elegant floor-length draped cape dress."
+        data-price="From GH₵8,900"
+        data-img="images/lady_men3.jpg"
+        data-tex1-img="images/lady_men2.jpg"
+        data-tex1-label="Waxed Canvas, Macro"
+        data-tex2-img="images/men_image11.jpg"
+        data-tex2-label="Horn Toggle Detail">
+        <div class="look-frame border border-line aspect-[4/5] sm:aspect-[16/10]">
+          <!-- INSERT LOOK 08 IMAGE LINK HERE -->
+          <img src="images/lady_men3.jpg" alt="The Cosmic Purple Duo" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Nii Trench to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 08</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Cosmic Purple Duo</p>
+          <p class="eyebrow text-sand/40">08</p>
+        </div>
+      </article>
+
+      <!-- LOOK 09 — right side, echoes the Look 05 rhythm -->
+      <article
+        class="look-item reveal reveal-d1 text-left lg:col-span-5 lg:col-start-8 lg:mt-6 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-09"
+        data-name="The Amethyst Plaid Ballgown"
+        data-code="LOOK 09 — RESORT"
+        data-motif="CHECKERED COTTON, LACE BODICE"
+        data-desc="A dramatic ballgown showcasing a bold purple and white checkered pattern, finished with a structured corset bodice and an elaborate floor-sweeping train."
+        data-price="From GH₵4,600"
+        data-img="images/lady_image14.jpg"
+        data-tex1-img="images/lady_image15.jpg"
+        data-tex1-label="Adire Cotton, Macro"
+        data-tex2-img="images/lady_image17.jpg"
+        data-tex2-label="Covered Button Detail">
+        <div class="look-frame border border-line aspect-[3/4]">
+          <!-- INSERT LOOK 09 IMAGE LINK HERE -->
+          <img src="images/lady_image14.jpg" alt="The Amethyst Plaid Ballgown" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Abena Midi Dress to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 09</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Amethyst Plaid Ballgown</p>
+          <p class="eyebrow text-sand/40">09</p>
+        </div>
+      </article>
+
+      <!-- LOOK 10 — grand finale, wide feature piece closing the catalog -->
+      <article
+        class="look-item reveal reveal-d2 text-left lg:col-span-7 lg:col-start-1 lg:mt-16 group cursor-pointer"
+        role="button" tabindex="0"
+        data-look-id="look-10"
+        data-name="The Crimson & Cobalt Affair"
+        data-code="LOOK 10 — RESORT"
+        data-motif="DUCHESSE SATIN, FLORAL APPLIQUÉ"
+        data-desc="A grand couple's statement look featuring a voluminous ruby-red evening gown with a cathedral train alongside a sleek navy suit accented with vibrant red floral embroidery."
+        data-price="From GH₵18,500"
+        data-img="images/lady_men5.jpg"
+        data-tex1-img="images/lady_men4.jpg"
+        data-tex1-label="Silk Duchesse, Macro"
+        data-tex2-img="images/lady_lady.jpg"
+        data-tex2-label="Hand-Embroidered Veil">
+        <div class="look-frame border border-line aspect-[4/5] sm:aspect-[21/9]">
+          <!-- INSERT LOOK 10 IMAGE LINK HERE -->
+          <img src="images/lady_men5.jpg" alt="The Crimson & Cobalt Affair" loading="lazy" class="w-full h-full object-cover">
+
+          <span class="absolute top-3 left-3 z-10 glass rounded-full px-3 py-1 eyebrow uppercase tracking-widest2 text-sand/75">Made to Measure</span>
+
+          <button type="button" class="save-toggle absolute top-3 right-3 z-10 w-9 h-9 rounded-full glass flex items-center justify-center hover:border-cognac transition-colors duration-300" aria-label="Save The Araba Bridal Column to your saved looks" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+
+          <div class="quick-view">
+            <div class="quick-view-inner glass rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+              <div>
+                <p class="eyebrow uppercase tracking-widest2 text-cognac">Look 10</p>
+                <p class="font-serif text-lg sm:text-xl">Quick View &amp; Details</p>
+              </div>
+              <span class="w-9 h-9 rounded-full glass-gold-edge flex items-center justify-center text-gold text-lg">→</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <p class="font-serif text-xl sm:text-2xl">The Crimson & Cobalt Affair</p>
+          <p class="eyebrow text-sand/40">10</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CRAFT — numbered steps (legitimate here: this IS a
+     sequential production process, so numbering encodes order)
+============================================================ -->
+<section id="craft" class="py-20 sm:py-28 lg:py-36 border-b border-line">
+  <div class="max-w-[1800px] mx-auto px-5 sm:px-8 lg:px-12">
+    <p class="reveal eyebrow uppercase tracking-widest2 text-cognac mb-3">The Craft</p>
+    <h2 class="reveal reveal-d1 font-serif h2-type tracking-tight mb-14 sm:mb-20 max-w-3xl">
+      From atelier to final fitting.
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12 border-t border-line pt-10">
+      <div class="reveal glass rounded-2xl p-6 sm:p-8">
+        <p class="font-serif text-4xl sm:text-5xl text-cognac mb-4">01</p>
+        <h3 class="h3-type font-serif mb-3">Consultation</h3>
+        <p class="text-sand/60 leading-relaxed"><!-- EDIT STEP COPY --> A private session in-atelier or virtual, to select fabric, hardware, and silhouette.</p>
+      </div>
+      <div class="reveal reveal-d1 glass rounded-2xl p-6 sm:p-8">
+        <p class="font-serif text-4xl sm:text-5xl text-cognac mb-4">02</p>
+        <h3 class="h3-type font-serif mb-3">Pattern &amp; Toile</h3>
+        <p class="text-sand/60 leading-relaxed">A muslin toile is cut and fitted to your exact measurements before a single cut of final fabric.</p>
+      </div>
+      <div class="reveal reveal-d2 glass rounded-2xl p-6 sm:p-8">
+        <p class="font-serif text-4xl sm:text-5xl text-cognac mb-4">03</p>
+        <h3 class="h3-type font-serif mb-3">Hand and machine Construction</h3>
+        <p class="text-sand/60 leading-relaxed">Your garment is built entirely by hand and machine across 60–130 hours, then delivered with a final fitting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     THE ATELIER JOURNAL — minimalist behind-the-scenes storytelling.
+     Photo-essay style entries introducing the artisans and process
+     behind the garments. EDIT ENTRY IMAGES, TITLES, AND EXCERPTS BELOW.
+============================================================ -->
+<section id="journal" class="py-20 sm:py-28 lg:py-36 border-b border-line">
+  <div class="max-w-[1800px] mx-auto px-5 sm:px-8 lg:px-12">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12 sm:mb-16">
+      <div>
+        <p class="reveal eyebrow uppercase tracking-widest2 text-cognac mb-3">The Atelier Journal</p>
+        <h2 class="reveal reveal-d1 font-serif h2-type tracking-tight">Stories from<br>the workroom.</h2>
+      </div>
+      <p class="reveal reveal-d2 text-sand/50 max-w-xs text-sm sm:text-base">
+        A closer look at the hands, tools, and hours behind every Obuasi piece.
+      </p>
+    </div>
+
+    <!-- Asymmetric editorial grid — one larger feature entry + two smaller companion entries -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+
+      <!-- JOURNAL ENTRY 01 — feature, spans wider -->
+      <article class="reveal lg:col-span-7">
+        <div class="look-frame border border-line aspect-[16/11] sm:aspect-[16/9]">
+          <!-- INSERT JOURNAL ENTRY 01 IMAGE LINK HERE -->
+          <img src="images/measurements.jpg" alt="Artisan hand-weaving fabric on a traditional loom in the Accra atelier" loading="lazy" class="w-full h-full object-cover">
+        </div>
+        <div class="mt-5 flex flex-col gap-2">
+          <p class="eyebrow uppercase tracking-widest2 text-cognac"><!-- EDIT DATE / CATEGORY -->Entry 01 — The Measure</p>
+          <h3 class="font-serif h3-type tracking-tight"><!-- EDIT HEADLINE -->Precise measurements</h3>
+          <p class="text-sand/60 leading-relaxed max-w-lg"><!-- EDIT EXCERPT -->The journey of an extraordinary garment begins with the precision of a single measurement. In our workroom, we honor the unique proportions of every individual who enters our space, ensuring that every curve, line, and silhouette is met with uncompromising exactness and meticulous hand-craftsmanship.</p>
+          <a href="#contact" class="mt-1 inline-flex items-center gap-2 text-sand hover:text-cognac transition-colors duration-300 eyebrow uppercase tracking-widest2 w-fit">
+            Read the Story <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- companion entries, stacked -->
+      <div class="lg:col-span-5 flex flex-col gap-8 sm:gap-10">
+
+        <!-- JOURNAL ENTRY 02 -->
+        <article class="reveal reveal-d1">
+          <div class="look-frame border border-line aspect-[16/10]">
+            <!-- INSERT JOURNAL ENTRY 02 IMAGE LINK HERE -->
+            <img src="images/making_image1.jpg" alt="Goldsmith hand-casting hardware for a garment clasp" loading="lazy" class="w-full h-full object-cover">
+          </div>
+          <div class="mt-4 flex flex-col gap-1.5">
+            <p class="eyebrow uppercase tracking-widest2 text-cognac">Entry 02 — The Sketch Book</p>
+            <h3 class="font-serif text-xl sm:text-2xl tracking-tight">The First Sketch</h3>
+            <p class="text-sand/60 leading-relaxed text-sm">Where ideas take their initial form on paper before a single piece of fabric is cut.</p>
+          </div>
+        </article>
+
+        <!-- JOURNAL ENTRY 03 -->
+        <article class="reveal reveal-d2">
+          <div class="look-frame border border-line aspect-[16/10]">
+            <!-- INSERT JOURNAL ENTRY 03 IMAGE LINK HERE -->
+            <img src="images/lady_sewing.jpg" alt="A tailor pinning fabric during a private fitting session" loading="lazy" class="w-full h-full object-cover">
+          </div>
+          <div class="mt-4 flex flex-col gap-1.5">
+            <p class="eyebrow uppercase tracking-widest2 text-cognac">Entry 03 — The Working Room</p>
+            <h3 class="font-serif text-xl sm:text-2xl tracking-tight">The Controlled Process</h3>
+            <p class="text-sand/60 leading-relaxed text-sm">Bringing the design to life on the machine, stitch by careful stitch.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- second row: Entries 04–05, equal-weight pairing for a fuller gallery rhythm -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mt-8 sm:mt-10">
+
+      <!-- JOURNAL ENTRY 04 -->
+      <article class="reveal reveal-d3">
+        <div class="look-frame border border-line aspect-[4/3]">
+          <!-- INSERT JOURNAL ENTRY 04 IMAGE LINK HERE -->
+          <img src="images/beading.jpg" alt="Hands hand-stitching a beaded bodice at the atelier workbench" loading="lazy" class="w-full h-full object-cover">
+        </div>
+        <div class="mt-4 flex flex-col gap-1.5">
+          <p class="eyebrow uppercase tracking-widest2 text-cognac"><!-- EDIT DATE / CATEGORY -->Entry 04 — The Beadwork Table</p>
+          <h3 class="font-serif text-xl sm:text-2xl tracking-tight"><!-- EDIT HEADLINE -->A Thousand Small Stitches</h3>
+          <p class="text-sand/60 leading-relaxed text-sm"><!-- EDIT EXCERPT -->A single beaded bodice can take upwards of forty hours. We sat beside our lead embroiderer to count the stitches — and lost count within the first ten minutes.</p>
+        </div>
+      </article>
+
+      <!-- JOURNAL ENTRY 05 -->
+      <article class="reveal reveal-d4">
+        <div class="look-frame border border-line aspect-[4/3]">
+          <!-- INSERT JOURNAL ENTRY 05 IMAGE LINK HERE -->
+          <img src="images/check.png" alt="Bolts of hand-dyed fabric drying in the sun outside the Accra atelier" loading="lazy" class="w-full h-full object-cover">
+        </div>
+        <div class="mt-4 flex flex-col gap-1.5">
+          <p class="eyebrow uppercase tracking-widest2 text-cognac">Entry 05 — The Finished Piece</p>
+          <h3 class="font-serif text-xl sm:text-2xl tracking-tight">The Final Reveal</h3>
+          <p class="text-sand/60 leading-relaxed text-sm">The moment a bespoke creation comes to life, showcasing vibrant patterns, expert tailoring, and effortless elegance.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT / CONVERSION
+============================================================ -->
+<section id="contact" class="py-24 sm:py-32 lg:py-40 bg-surface">
+  <div class="max-w-[1800px] mx-auto px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      <div class="lg:col-span-7">
+        <p class="reveal eyebrow uppercase tracking-widest2 text-cognac mb-4">Private Consultation</p>
+        <h2 class="reveal reveal-d1 font-serif h2-type tracking-tight">
+          Begin with<br>a conversation.
+        </h2>
+      </div>
+      <div class="lg:col-span-4 lg:col-start-9 flex flex-col gap-5">
+        <p class="reveal reveal-d2 text-sand/60 leading-relaxed">
+          Consultations are available by appointment in Accra, or virtually worldwide. Message us directly to begin.
+        </p>
+        <!-- CHANGE WHATSAPP NUMBER + PREFILLED MESSAGE HERE -->
+        <a href="https://wa.me/233257593878?text=Hello%2C%20I%20would%20like%20to%20request%20a%20private%20atelier%20consultation."
+           target="_blank" rel="noopener"
+           class="reveal reveal-d3 inline-flex items-center justify-center gap-3 bg-cognac text-sand px-7 py-4 eyebrow uppercase tracking-widest2 rounded-full hover:bg-sand hover:text-obsidian transition-colors duration-300 w-fit">
+          Message on WhatsApp
+        </a>
+        <a href="mailto: hrtechnologies003@gmail.com" class="reveal reveal-d4 text-sm text-sand/40 hover:text-cognac transition-colors duration-300 underline underline-offset-4">
+          hrtechnologies003@gmail.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ATELIER LOCATION & HOURS — placed deliberately just above the
+     footer so it's the natural last stop as a visitor scrolls:
+     physical address, visiting hours, and a direct CTA to book an
+     in-person fitting. EDIT ADDRESS / HOURS / MAP LINK BELOW.
+============================================================ -->
+<section id="visit" class="py-20 sm:py-28 border-t border-line">
+  <div class="max-w-[1800px] mx-auto px-5 sm:px-8 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8">
+
+      <div class="lg:col-span-4">
+        <p class="reveal eyebrow uppercase tracking-widest2 text-cognac mb-4">Visit the Atelier</p>
+        <h2 class="reveal reveal-d1 font-serif h2-type tracking-tight">See it,<br>touch it, first.</h2>
+        <p class="reveal reveal-d2 text-sand/60 leading-relaxed mt-6 max-w-sm">
+          Fabric, hardware, and fit read differently in person. We welcome clients into the workroom by appointment.
+        </p>
+      </div>
+
+      <div class="lg:col-span-7 lg:col-start-6">
+        <div class="reveal reveal-d1 glass glass-gold-edge rounded-2xl sm:rounded-3xl p-6 sm:p-10 grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10">
+
+          <!-- ADDRESS -->
+          <div>
+            <div class="flex items-center gap-2.5 mb-3">
+              <svg class="w-4 h-4 text-cognac shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              <p class="eyebrow uppercase tracking-widest2 text-sand/50">Address</p>
+            </div>
+            <!-- INSERT ATELIER ADDRESS HERE -->
+            <p class="text-sand leading-relaxed">
+              Ashaiman <br>
+              Behind fire service block<br>
+              Tiens Ashaiman Shops<br>
+              Accra, Ghana
+            </p>
+            <!-- INSERT GOOGLE MAPS LINK HERE -->
+            <a href="https://maps.google.com/?q=Tiens+ashaiman+shops+behind+fire station+Accra+Ghana" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-1.5 mt-3 text-sm text-cognac hover:text-sand transition-colors duration-300 underline underline-offset-4">
+              Get Directions <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <!-- HOURS -->
+          <div>
+            <div class="flex items-center gap-2.5 mb-3">
+              <svg class="w-4 h-4 text-cognac shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+              </svg>
+              <p class="eyebrow uppercase tracking-widest2 text-sand/50">Visiting Hours</p>
+            </div>
+            <!-- EDIT VISITING HOURS HERE -->
+            <p class="text-sand leading-relaxed">
+              Monday – Saturday<br>
+              10:00 – 18:00 GMT<br>
+              <span class="text-sand/50">By private appointment only</span>
+            </p>
+          </div>
+
+          <!-- CTA — spans full width of the card on all breakpoints -->
+          <div class="sm:col-span-2 pt-2 border-t border-line/70 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- CHANGE WHATSAPP NUMBER + PREFILLED MESSAGE HERE -->
+            <a href="https://wa.me/+233257593878?text=Hello%2C%20I%20would%20like%20to%20book%20an%20in-person%20fitting%20at%20the%20Accra%20atelier."
+               target="_blank" rel="noopener"
+               class="inline-flex items-center justify-center gap-3 bg-cognac text-sand px-6 py-3.5 eyebrow uppercase tracking-widest2 rounded-full hover:bg-sand hover:text-obsidian transition-colors duration-300">
+              Book an In-Person Fitting
+            </a>
+            <p class="text-sand/40 text-xs sm:text-sm sm:ml-2">
+              Virtual consultations also available for clients outside Accra.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="py-10 sm:py-12">
+  <div class="max-w-[1800px] mx-auto px-5 sm:px-8 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-sand/40">
+    <p>&copy; <span id="yearNow"></span> Obuasi House of Gold. All rights reserved.</p>
+    <div class="flex gap-6">
+      <a href="#visit" class="hover:text-cognac transition-colors">Visit</a>
+      <a href="#" class="hover:text-cognac transition-colors">Instagram</a>
+      <a href="#" class="hover:text-cognac transition-colors">Pinterest</a>
+      <a href="#journal" class="hover:text-cognac transition-colors">Journal</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     LOOKBOOK MODAL DRAWER — frosted glass backdrop + glass panel,
+     populated dynamically by JS
+============================================================ -->
+<div id="lookModal" class="fixed inset-0 z-50 hidden opacity-0" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <!-- frosted glass backdrop -->
+  <div id="modalBackdrop" class="absolute inset-0 bg-obsidian/70 backdrop-blur-md"></div>
+
+  <div class="relative h-full w-full flex items-center justify-center p-4 sm:p-6">
+    <div id="modalPanel" class="opacity-0 translate-y-6 glass glass-gold-edge rounded-[1.5rem] max-w-4xl w-full max-h-[90vh] overflow-y-auto grid grid-cols-1 md:grid-cols-2">
+
+      <div class="relative">
+        <div class="aspect-[4/5] md:aspect-auto md:h-full">
+          <img id="modalImg" src="" alt="" class="w-full h-full object-cover md:rounded-l-[1.5rem]">
+        </div>
+
+        <!-- FABRIC TEXTURE INSPECTION — thumbnail strip lets the client swap the
+             main image for macro shots of the weave, beadwork, or hardware.
+             Populated dynamically from each look's data-tex1-*/data-tex2-* attributes. -->
+        <div class="absolute bottom-4 left-4 right-4 flex items-center gap-2">
+          <span class="eyebrow uppercase tracking-widest2 text-sand/70 glass rounded-full px-3 py-1.5 shrink-0 hidden sm:inline-block">Inspect Fabric</span>
+          <div id="modalThumbs" class="flex items-center gap-2 overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 lg:p-10 flex flex-col">
+        <button id="modalClose" aria-label="Close" class="self-end w-9 h-9 rounded-full flex items-center justify-center glass hover:border-cognac hover:text-cognac transition-colors mb-6">
+          &times;
+        </button>
+
+        <p id="modalCode" class="eyebrow uppercase tracking-widest2 text-cognac mb-3"></p>
+        <h3 id="modalTitle" class="font-serif h3-type tracking-tight mb-2"></h3>
+        <p id="modalMotif" class="eyebrow uppercase tracking-widest2 text-sand/40 mb-5"></p>
+        <p id="modalDesc" class="text-sand/70 leading-relaxed mb-4"></p>
+        <p id="modalPrice" class="font-serif text-2xl mb-4"></p>
+
+        <!-- explicit custom-commission messaging, shown on every look -->
+        <p class="glass rounded-xl px-4 py-3 text-sm text-sand/70 leading-relaxed mb-8">
+          <span class="text-cognac">Made to your measure —</span> this silhouette can be recreated in your size, preferred fabric, and colourway.
+        </p>
+
+        <div class="mt-auto flex flex-col gap-3">
+          <!-- pre-filled WhatsApp inquiry link, built per-look in JS -->
+          <a id="modalWhatsapp" href="#" target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center gap-3 bg-sand text-obsidian px-6 py-4 eyebrow uppercase tracking-widest2 rounded-full hover:bg-cognac hover:text-sand transition-colors duration-300">
+            Inquire on WhatsApp
+          </a>
+          <!-- save/heart toggle mirrored inside the modal for convenience -->
+          <button id="modalSaveToggle" type="button" class="save-toggle inline-flex items-center justify-center gap-2 glass px-6 py-3.5 eyebrow uppercase tracking-widest2 rounded-full hover:border-cognac transition-colors duration-300" aria-pressed="false">
+            <svg class="save-icon w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+            <span id="modalSaveLabel">Save this Look</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SAVED LOOKS — floating toggle (bottom-left, mirrors the
+     WhatsApp button on the right) + slide-in drawer. Selections
+     persist in localStorage so a returning client's saved looks
+     are still there on their next visit.
+============================================================ -->
+<button id="savedToggle" type="button" aria-label="Open your saved looks" aria-expanded="false"
+        class="fixed bottom-5 left-5 sm:bottom-8 sm:left-8 z-50 w-14 h-14 sm:w-16 sm:h-16 rounded-full glass glass-gold-edge shadow-elevated flex items-center justify-center hover:border-cognac transition-colors duration-300">
+  <svg class="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+  </svg>
+  <!-- saved-item count badge -->
+  <span id="savedCount" class="saved-badge hidden absolute -top-1 -right-1 rounded-full bg-cognac text-sand flex items-center justify-center px-1 font-semibold">0</span>
+</button>
+
+<div id="savedDrawer" class="fixed top-0 right-0 z-50 h-full w-full sm:w-[26rem] translate-x-full bg-surface border-l border-line flex flex-col" role="dialog" aria-modal="true" aria-labelledby="savedDrawerTitle">
+  <div class="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-line">
+    <h3 id="savedDrawerTitle" class="font-serif text-2xl tracking-tight">Saved Looks</h3>
+    <button id="savedDrawerClose" aria-label="Close saved looks" class="w-9 h-9 rounded-full flex items-center justify-center glass hover:border-cognac hover:text-cognac transition-colors">&times;</button>
+  </div>
+
+  <!-- populated dynamically by JS -->
+  <div id="savedList" class="flex-1 overflow-y-auto px-6 sm:px-8 py-6 flex flex-col gap-5"></div>
+
+  <!-- shown only when savedList is empty -->
+  <p id="savedEmpty" class="hidden px-6 sm:px-8 text-sand/50 text-sm leading-relaxed">
+    Nothing saved yet. Tap the heart on any look in the Lookbook to start curating your own custom collection.
+  </p>
+
+  <div class="px-6 sm:px-8 py-6 border-t border-line">
+    <p class="text-sand/50 text-xs leading-relaxed mb-4">
+      Every saved look can be custom-made to your exact measure, fabric, and colourway.
+    </p>
+    <!-- built dynamically in JS to list every saved look in one message -->
+    <a id="savedWhatsapp" href="#" target="_blank" rel="noopener"
+       class="inline-flex w-full items-center justify-center gap-3 bg-cognac text-sand px-6 py-4 eyebrow uppercase tracking-widest2 rounded-full hover:bg-sand hover:text-obsidian transition-colors duration-300">
+      Inquire About Saved Looks
+    </a>
+  </div>
+</div>
+<div id="savedDrawerBackdrop" class="fixed inset-0 z-40 bg-obsidian/70 backdrop-blur-sm opacity-0 pointer-events-none"></div>
+
+<!-- ============================================================
+     FLOATING WHATSAPP BUTTON — fixed, pulsing live indicator
+============================================================ -->
+<!-- CHANGE WHATSAPP NUMBER HERE -->
+<a href="https://wa.me/+233257593878?text=Hello%2C%20I%20would%20like%20to%20request%20a%20private%20atelier%20consultation."
+   target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+   class="fixed bottom-5 right-5 sm:bottom-8 sm:right-8 z-50 group">
+  <span class="relative flex w-14 h-14 sm:w-16 sm:h-16">
+    <span class="wa-ping"></span>
+    <span class="relative inline-flex items-center justify-center w-full h-full rounded-full bg-[#25D366] shadow-lg group-hover:scale-105 transition-transform duration-300">
+      <svg viewBox="0 0 24 24" fill="white" class="w-7 h-7 sm:w-8 sm:h-8">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.86 9.86 0 0 0 12.04 2zm5.8 14.13c-.24.68-1.4 1.33-1.93 1.4-.5.08-1.12.11-1.8-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.13-4.9-4.32-.14-.19-1.17-1.56-1.17-2.98s.75-2.11 1.02-2.4c.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.14.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.14.46.12.63-.07.17-.19.72-.84.92-1.13.19-.29.38-.24.63-.14.26.1 1.66.78 1.94.93.29.14.48.21.55.33.07.12.07.68-.17 1.36z"/>
+      </svg>
+    </span>
+  </span>
+</a>
+
+<!-- ============================================================
+     JAVASCRIPT — reveal engine, modal drawer, nav behavior
+============================================================ -->
+<script>
+  // ---- footer year ----
+  document.getElementById('yearNow').textContent = new Date().getFullYear();
+
+  // ---- header solid background on scroll (transparent over hero) ----
+  const header = document.getElementById('siteHeader');
+  const setHeaderState = () => {
+    if (window.scrollY > 40) {
+      header.classList.add('bg-obsidian/90', 'backdrop-blur-md', 'border-b', 'border-line');
+    } else {
+      header.classList.remove('bg-obsidian/90', 'backdrop-blur-md', 'border-b', 'border-line');
+    }
+  };
+  setHeaderState();
+  window.addEventListener('scroll', setHeaderState, { passive: true });
+
+  // ---- mobile menu toggle ----
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = !mobileNav.classList.contains('hidden');
+    mobileNav.classList.toggle('hidden');
+    menuToggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => mobileNav.classList.add('hidden'));
+  });
+
+  /* ============================================================
+     REVEAL ENGINE
+     Watches every element with the .reveal class and adds
+     .reveal-active once it scrolls into the viewport, triggering
+     the fade + translate transition defined in <style> above.
+  ============================================================ */
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-active');
+        revealObserver.unobserve(entry.target); // animate once, keep perf light
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -8% 0px'
+  });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  /* ============================================================
+     LOOKBOOK MODAL DRAWER
+     Reads data-* attributes off the clicked .look-item button
+     and populates the modal, including a per-look WhatsApp
+     inquiry link with a pre-filled, URL-encoded message.
+  ============================================================ */
+  const modal = document.getElementById('lookModal');
+  const modalPanel = document.getElementById('modalPanel');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalImg = document.getElementById('modalImg');
+  const modalCode = document.getElementById('modalCode');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalMotif = document.getElementById('modalMotif');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalPrice = document.getElementById('modalPrice');
+  const modalWhatsapp = document.getElementById('modalWhatsapp');
+  const modalThumbs = document.getElementById('modalThumbs');
+  const modalSaveToggle = document.getElementById('modalSaveToggle');
+  const modalSaveLabel = document.getElementById('modalSaveLabel');
+
+  // CHANGE WHATSAPP NUMBER HERE — must match the number used elsewhere on the page
+  const WHATSAPP_NUMBER = '+233257593878';
+
+  let lastFocusedEl = null;
+  let currentLookItem = null; // the .look-item currently open in the modal, used by the save toggle
+
+  /* ------------------------------------------------------------
+     FABRIC TEXTURE INSPECTION
+     Builds a row of thumbnails — the main look shot plus any
+     data-tex1-img / data-tex2-img close-ups — so a client can
+     tap through to inspect the weave, beadwork, or hardware.
+  ------------------------------------------------------------ */
+  function buildTextureThumbs(item) {
+    modalThumbs.innerHTML = '';
+
+    const views = [{ img: item.dataset.img, label: 'Full Look' }];
+    if (item.dataset.tex1Img) views.push({ img: item.dataset.tex1Img, label: item.dataset.tex1Label || 'Detail' });
+    if (item.dataset.tex2Img) views.push({ img: item.dataset.tex2Img, label: item.dataset.tex2Label || 'Detail' });
+
+    views.forEach((view, i) => {
+      const thumb = document.createElement('button');
+      thumb.type = 'button';
+      thumb.className = 'tex-thumb w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden shrink-0' + (i === 0 ? ' is-active' : '');
+      thumb.setAttribute('aria-label', `View: ${view.label}`);
+      thumb.innerHTML = `<img src="${view.img}" alt="" class="w-full h-full object-cover" loading="lazy">`;
+      thumb.addEventListener('click', () => {
+        modalImg.src = view.img;
+        modalImg.alt = `${item.dataset.name} — ${view.label}`;
+        modalThumbs.querySelectorAll('.tex-thumb').forEach(t => t.classList.remove('is-active'));
+        thumb.classList.add('is-active');
+      });
+      modalThumbs.appendChild(thumb);
+    });
+  }
+
+  function openModal(item) {
+    lastFocusedEl = document.activeElement;
+    currentLookItem = item;
+
+    modalImg.src = item.dataset.img;
+    modalImg.alt = item.dataset.name;
+    modalCode.textContent = item.dataset.code;
+    modalTitle.textContent = item.dataset.name;
+    modalMotif.textContent = item.dataset.motif;
+    modalDesc.textContent = item.dataset.desc;
+    modalPrice.textContent = item.dataset.price;
+    buildTextureThumbs(item);
+    syncModalSaveButton();
+
+    // pre-filled inquiry message, explicit about the custom-commission option
+    const message = `Hello, I'd like to inquire about "${item.dataset.name}" (${item.dataset.code}). I understand this can be custom-made to my measurements — could you share availability, fabric options, and fitting details?`;
+    modalWhatsapp.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // lock background scroll while modal is open
+    requestAnimationFrame(() => {
+      modal.classList.remove('opacity-0');
+      modalPanel.classList.remove('opacity-0', 'translate-y-6');
+    });
+    modalPanel.querySelector('#modalClose').focus();
+  }
+
+  function closeModal() {
+    modal.classList.add('opacity-0');
+    modalPanel.classList.add('opacity-0', 'translate-y-6');
+    document.body.style.overflow = '';
+    setTimeout(() => modal.classList.add('hidden'), 450);
+    if (lastFocusedEl) lastFocusedEl.focus();
+  }
+
+  // open the modal on click, ignoring clicks that originated on the save/heart button
+  document.querySelectorAll('.look-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      if (e.target.closest('.save-toggle')) return;
+      openModal(item);
+    });
+    // keyboard support since .look-item is an <article role="button">, not a native <button>
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(item);
+      }
+    });
+  });
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (!modal.classList.contains('hidden')) closeModal();
+      if (!savedDrawer.classList.contains('translate-x-full')) closeSavedDrawer();
+    }
+  });
+
+  /* ============================================================
+     PRIVATE CLIENT WISHLIST — "Saved Looks"
+     Saved look IDs persist in localStorage (matching this
+     project's usual vanilla-JS + localStorage stack) so a
+     returning client's curated collection is still there later.
+  ============================================================ */
+  const SAVED_LOOKS_KEY = 'obuasi_saved_looks'; // CHANGE STORAGE KEY HERE if reusing this pattern across multiple pages
+  const savedToggle = document.getElementById('savedToggle');
+  const savedDrawer = document.getElementById('savedDrawer');
+  const savedDrawerBackdrop = document.getElementById('savedDrawerBackdrop');
+  const savedDrawerClose = document.getElementById('savedDrawerClose');
+  const savedList = document.getElementById('savedList');
+  const savedEmpty = document.getElementById('savedEmpty');
+  const savedCount = document.getElementById('savedCount');
+  const savedWhatsapp = document.getElementById('savedWhatsapp');
+
+  function getSavedIds() {
+    try {
+      return JSON.parse(localStorage.getItem(SAVED_LOOKS_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function setSavedIds(ids) {
+    localStorage.setItem(SAVED_LOOKS_KEY, JSON.stringify(ids));
+  }
+
+  function isSaved(lookId) {
+    return getSavedIds().includes(lookId);
+  }
+
+  function toggleSaved(lookId) {
+    const ids = getSavedIds();
+    const idx = ids.indexOf(lookId);
+    if (idx > -1) {
+      ids.splice(idx, 1);
+    } else {
+      ids.push(lookId);
+    }
+    setSavedIds(ids);
+    refreshSavedUI();
+  }
+
+  // sync every heart button's visual state (grid cards + the one inside the modal) with localStorage
+  function refreshSaveButtons() {
+    document.querySelectorAll('.look-item').forEach(item => {
+      const saved = isSaved(item.dataset.lookId);
+      const btn = item.querySelector('.save-toggle');
+      if (btn) {
+        btn.classList.toggle('is-saved', saved);
+        btn.setAttribute('aria-pressed', String(saved));
+      }
+    });
+    syncModalSaveButton();
+  }
+
+  function syncModalSaveButton() {
+    if (!currentLookItem) return;
+    const saved = isSaved(currentLookItem.dataset.lookId);
+    modalSaveToggle.classList.toggle('is-saved', saved);
+    modalSaveToggle.setAttribute('aria-pressed', String(saved));
+    modalSaveLabel.textContent = saved ? 'Saved to Your Looks' : 'Save this Look';
+  }
+
+  // render the drawer list + floating badge count + combined WhatsApp inquiry link
+  function refreshSavedUI() {
+    refreshSaveButtons();
+
+    const ids = getSavedIds();
+    const items = ids
+      .map(id => document.querySelector(`.look-item[data-look-id="${id}"]`))
+      .filter(Boolean);
+
+    savedCount.textContent = String(items.length);
+    savedCount.classList.toggle('hidden', items.length === 0);
+
+    savedList.innerHTML = '';
+    savedEmpty.classList.toggle('hidden', items.length > 0);
+
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center gap-4 border-b border-line pb-5';
+      row.innerHTML = `
+        <div class="w-16 h-20 rounded-lg overflow-hidden shrink-0 border border-line">
+          <img src="${item.dataset.img}" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-serif text-lg truncate">${item.dataset.name}</p>
+          <p class="eyebrow uppercase tracking-widest2 text-sand/40 mt-1">${item.dataset.price}</p>
+        </div>
+        <button type="button" class="remove-saved w-8 h-8 rounded-full glass flex items-center justify-center hover:border-cognac hover:text-cognac transition-colors shrink-0" aria-label="Remove ${item.dataset.name} from saved looks">&times;</button>
+      `;
+      row.querySelector('.remove-saved').addEventListener('click', () => toggleSaved(item.dataset.lookId));
+      savedList.appendChild(row);
+    });
+
+    // build one combined WhatsApp message listing every saved look
+    if (items.length > 0) {
+      const names = items.map(item => `• ${item.dataset.name} (${item.dataset.code})`).join('\n');
+      const message = `Hello, I'd like to inquire about a custom commission for the following saved looks:\n\n${names}\n\nAll pieces can be made to my measurements — could you share fabric options and next steps?`;
+      savedWhatsapp.href = `https://wa.me/${+233257593878}?text=${encodeURIComponent(message)}`;
+    } else {
+      savedWhatsapp.href = `https://wa.me/${+2330257593878}?text=${encodeURIComponent('Hello, I would like to request a private atelier consultation.')}`;
+    }
+  }
+
+  // heart clicks on the lookbook grid cards
+  document.querySelectorAll('.save-toggle').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // don't also trigger the parent .look-item's modal-open handler
+      const item = btn.closest('.look-item');
+      toggleSaved(item.dataset.lookId);
+    });
+  });
+
+  // heart button inside the modal, mirrors whichever look is currently open
+  modalSaveToggle.addEventListener('click', () => {
+    if (currentLookItem) toggleSaved(currentLookItem.dataset.lookId);
+  });
+
+  function openSavedDrawer() {
+    savedDrawer.classList.remove('translate-x-full');
+    savedDrawerBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+    savedToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSavedDrawer() {
+    savedDrawer.classList.add('translate-x-full');
+    savedDrawerBackdrop.classList.add('opacity-0', 'pointer-events-none');
+    savedToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  savedToggle.addEventListener('click', openSavedDrawer);
+  savedDrawerClose.addEventListener('click', closeSavedDrawer);
+  savedDrawerBackdrop.addEventListener('click', closeSavedDrawer);
+
+  // initial paint on page load — restores saved state from localStorage
+  refreshSavedUI();
+</script>
+
+</body>
+</html>
